@@ -1,18 +1,49 @@
-S'          -> "Algorithme" S
-S           -> "debut" BLOCK "fin"
-BLOCK       -> DECLARATION BLOCK | ASSIGNATION BLOCK | SI BLOCK | TANTQUE BLOCK | ECRIRE BLOCK | LIRE BLOCK €
-DECLARATION -> TYPE VARIABLE "=" EXPR ";" | TYPE VARIABLE ";"
-ASSIGNATION -> VARIABLE "=" EXPR ";"
-SI          -> "si" EXPR "alors" BLOCK "fsi"
-TANTQUE     -> "tant" "que" EXPR "faire" BLOCK "ftant"
-ECRIRE      -> "ecrire" "(" EXPR ")" ";"
-LIRE        -> "lire" "(" VARIABLE ")" ";"
-EXPR        -> "(" EXPR ")" | EXPR OPERATOR EXPR | OPERAND | "non" EXPR
-OPERATOR    -> "+" | "-" | "/" | "*" | "%" | "et" | "ou" | "<" | ">" | OPEGAL "="
-OPEGAL      -> "=" | "non" | "<" | ">"
-OPERAND     -> [0-9]+ | [0-9]+\.[0-9]+ | VARIABLE | "null" | "true" | "false" | STRING
-TYPE        -> [A-Z][A-Za-z0-9]* | "entier" | "decimal" | "chaine" | "booleen"
+S'          -> ALGORITHME S
+S           -> DEBUT BLOCK FIN
+BLOCK       -> DECLARATION BLOCK | ASSIGNATION BLOCK | SI BLOCK | FUNCTIONEXE BLOCK | LIRE BLOCK | €
+DECLARATION -> TYPE ASSIGNATION | TYPE VARIABLE EOI
+ASSIGNATION -> VARIABLE EGAL EXPR EOI
+SI          -> SI EXPR BLOCK FSI | SI EXPR BLOCK SINON BLOCK FSI
+TANTQUE     -> TANTQUE EXPR BLOCK FTANT
+FUNCTIONEXE -> FUNCNAME PARENTHESEO ARGUMENT PARENTHESEF EOI
+ARGUMENT    -> ARGUMENTN | €
+ARGUMENTN   -> ARGUMENTF | ARGUMENTF VIRGULE ARGUMENTN
+ARGUMENTF   -> EXPR | VARIABLE
+EXPR        -> PARENTHESEO EXPR PARENTHESEF | EXPR BINOPERATOR EXPR | OPERAND | UNAOPERATOR EXPR
+TYPE        -> TYPENORM | TYPEPRIM
+BINOPERATOR -> OPERATOR | OPEGAL EGAL
+OPERAND     -> NUMBER | VARIABLE | NULL | BOOLEAN | STRING
+NUMBER      -> ENTIER | DECIMAL
+UNAOPERATOR -> NON | MINUS | PLUS
+OPEGAL      -> NON | INFSUP | EGAL
+OPERATOR    -> PLUS | MINUS | COMPMATHOP | BOOLOP | INFSUP
+
+ALGORITHME  -> "Algorithme"
+DEBUT       -> "debut"
+FIN         -> "fin"
+EGAL        -> "="
+BOOLEAN     -> "true" | "false"
+TYPEPRIM    -> "entier" | "decimal" | "chaine" | "booleen"
+BOOLOP      -> "et" | "ou"
+COMPMATHOP  -> "/" | "*" | "%"
+INFSUP      -> "<" | ">"
+NULL        -> "null"
+MINUS       -> "-"
+PLUS        -> "+"
+NON         -> "non"
+PARENTHESEO -> "("
+PARENTHESEF -> ")"
+EOI         -> ";"
+VIRGULE     -> ","
+SI          -> "si"
+SINON       -> "sinon"
+FSI         -> "fsi"
+TANTQUE     -> "tantque"
+FTANT       -> "ftant"
+
+ENTIER      -> [0-9]+
+DECIMAL     -> [0-9]*\.[0-9]+
+TYPENORM    -> [A-Z][A-Za-z0-9]*
 VARIABLE    -> [A-Za-z][A-Za-z0-9]*
-STRING      -> `"` .* `"`
-
-
+FUNCNAME    -> [A-Za-z_][A-Za-z0-9_]*
+STRING      -> \".*\"
