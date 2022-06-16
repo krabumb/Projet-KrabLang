@@ -1,11 +1,14 @@
 package fr.krabumb.krablang;
 
 import fr.krabumb.krablang.analex.AnalyseLexical;
+import fr.krabumb.krablang.ast.Token;
+import fr.krabumb.krablang.exceptions.LexicalException;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,6 +18,13 @@ public class Main {
         }
         String contents = readFile(args[0]);
         AnalyseLexical analyseLexical = new AnalyseLexical();
+        try {
+            Stream<Token> tokens = analyseLexical.generateStreamToken(contents);
+            tokens.forEach((token) -> System.out.println(token.getType() + " : " + token.getValue()));
+        } catch (LexicalException e) {
+            e.printStackTrace();
+            System.exit(2);
+        }
     }
 
     public static String readFile(String path){
