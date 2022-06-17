@@ -1,0 +1,24 @@
+# Algorithme qui calcule l'iteration n
+# de la suite de fibonacci
+Algorithme
+    debut
+        entier n = 0;
+        lire(n);
+        # si n est inferieur à 0, la reponse est 0
+        si n <= 0
+            ecrire(0);
+        sinon
+            entier i = 1; # boucle qui commence a 1
+            entier a = 0;
+            entier b = 1;
+            entier c = a+b; # on met à 1 par defaut pour le calcul
+            tantque i < n # tant que qui pourrait etre factorise avec "pour i allant de 1 a n"
+                c = a+b;
+                a = b;
+                b = c;
+                i = i + 1;
+            ftant
+            # on ecrit le resultat final
+            ecrire(c);
+        fsi
+    fin

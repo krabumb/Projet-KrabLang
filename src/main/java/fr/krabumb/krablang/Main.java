@@ -13,8 +13,11 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("usage : krablang.jar <file.krl>");
+            System.out.println("Usage : krablang.jar <file.krbl>");
             System.exit(1);
+        } else if (! args[0].endsWith("krbl")){
+            System.out.println("Erreur : le fichier ne se termine pas par '.krbl' ");
+            System.exit(11);
         }
         String contents = readFile(args[0]);
         AnalyseLexical analyseLexical = new AnalyseLexical();
@@ -42,7 +45,7 @@ public class Main {
             System.out.println(erreur + " : fichier introuvable");
             System.exit(2);
         } catch (IOException e) {
-            System.out.println(erreur + " : le fichier n'est pas un fichier textuel");
+            System.out.println(erreur + " : le fichier est illisible");
             System.exit(3);
         }
         return sb.toString();

@@ -14,6 +14,7 @@ public class AnalyseLexical {
     public static final int DECIMAL = 2;
     public static final int TVF = 3;
     public static final int STRING = 4;
+    public static final int COMMENTAIRE = 5;
 
     public Stream<Token> generateStreamToken(String file) throws LexicalException {
         ArrayList<Token> tokens = new ArrayList<>();
@@ -40,6 +41,8 @@ public class AnalyseLexical {
                             currentToken.append(c);
                         } else if (c == '"') {
                             state = STRING;
+                        } else if (c == '#') {
+                            state = COMMENTAIRE;
                         } else {
                             tokens.add(getTokenFromSymbol(c, ln, cn));
                         }
@@ -56,6 +59,10 @@ public class AnalyseLexical {
                         } else if (c == '.') {
                             state = DECIMAL;
                             currentToken.append(c);
+                        } else if (c == '#') {
+                            tokens.add(new Token("ENTIER", currentToken.toString(), ln, cn));
+                            currentToken.delete(0, currentToken.length());
+                            state = COMMENTAIRE;
                         } else {
                             tokens.add(new Token("ENTIER", currentToken.toString(), ln, cn));
                             currentToken.delete(0, currentToken.length());
@@ -77,6 +84,10 @@ public class AnalyseLexical {
                                 throw new LexicalException(String.format("ERREUR : nombre decimal non valide (%d:%d)", ln, cn));
                             }
                             currentToken.append(c);
+                        } else if (c == '#') {
+                            tokens.add(new Token("DECIMAL", currentToken.toString(), ln, cn));
+                            currentToken.delete(0, currentToken.length());
+                            state = COMMENTAIRE;
                         } else {
                             tokens.add(new Token("DECIMAL", currentToken.toString(), ln, cn));
                             currentToken.delete(0, currentToken.length());
@@ -93,6 +104,10 @@ public class AnalyseLexical {
                     if (!Character.isWhitespace(c)) {
                         if (Character.isLetterOrDigit(c) || c == '_') {
                             currentToken.append(c);
+                        } else if (c == '#') {
+                            tokens.add(getTokenFromTVF(currentToken.toString(), ln, cn));
+                            currentToken.delete(0, currentToken.length());
+                            state = COMMENTAIRE;
                         } else {
                             tokens.add(getTokenFromTVF(currentToken.toString(), ln, cn));
                             currentToken.delete(0, currentToken.length());
@@ -116,6 +131,13 @@ public class AnalyseLexical {
                         state = RIEN;
                     }
                     break;
+                case COMMENTAIRE:
+                    if (c == '\n') {
+                        state = RIEN;
+                    }
+                    break;
+                default:
+                    state = RIEN;
             }
         }
         return tokens.stream();
