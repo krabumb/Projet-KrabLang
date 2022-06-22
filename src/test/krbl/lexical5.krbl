@@ -12,7 +12,7 @@ Algorithme
             entier a = 0;
             entier b = 1;
             entier c = a+b; # on met à 1 par defaut pour le calcul
-            tantque i < n # tant que qui pourrait etre factorise avec "pour i allant de 1 a n"
+            tant que i < n # tant que qui pourrait etre factorise avec "pour i allant de 1 a n"
                 c = a+b;
                 a = b;
                 b = c;

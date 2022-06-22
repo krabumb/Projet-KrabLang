@@ -4,6 +4,7 @@ import fr.krabumb.krablang.ast.Token;
 import fr.krabumb.krablang.exceptions.LexicalException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.stream.Stream;
 
@@ -16,7 +17,7 @@ public class AnalyseLexical {
     public static final int STRING = 4;
     public static final int COMMENTAIRE = 5;
 
-    public Stream<Token> generateStreamToken(String file) throws LexicalException {
+    public Iterator<Token> generateIteratorToken(String file) throws LexicalException {
         ArrayList<Token> tokens = new ArrayList<>();
         int state = RIEN;
         int ln = 1;
@@ -140,7 +141,8 @@ public class AnalyseLexical {
                     state = RIEN;
             }
         }
-        return tokens.stream();
+        tokens.add(new Token("EOF", "", ln, cn));
+        return tokens.iterator();
     }
 
     public Token getTokenFromSymbol(char c, int ln, int cn) throws LexicalException {
@@ -159,10 +161,8 @@ public class AnalyseLexical {
                 type = "INFSUP";
                 break;
             case '-':
-                type = "MINUS";
-                break;
             case '+':
-                type = "PLUS";
+                type = "PLUSMINUS";
                 break;
             case '(':
                 type = "PARENTHESEO";
@@ -193,7 +193,8 @@ public class AnalyseLexical {
             case "si":
             case "sinon":
             case "fsi":
-            case "tantque":
+            case "tant":
+            case "que":
             case "ftant":
                 type = str.toUpperCase(Locale.ROOT);
                 break;

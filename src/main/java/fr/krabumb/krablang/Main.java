@@ -1,8 +1,10 @@
 package fr.krabumb.krablang;
 
 import fr.krabumb.krablang.analex.AnalyseLexical;
+import fr.krabumb.krablang.analex.AnalyseSyntaxique;
 import fr.krabumb.krablang.ast.Token;
 import fr.krabumb.krablang.exceptions.LexicalException;
+import fr.krabumb.krablang.exceptions.SyntaxException;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -21,12 +23,16 @@ public class Main {
         }
         String contents = readFile(args[0]);
         AnalyseLexical analyseLexical = new AnalyseLexical();
+        AnalyseSyntaxique analyseSyntaxique = new AnalyseSyntaxique();
         try {
-            Stream<Token> tokens = analyseLexical.generateStreamToken(contents);
-            tokens.forEach((token) -> System.out.println(token.getType() + " : " + token.getValue()));
+            var tokens = analyseLexical.generateIteratorToken(contents);
+            analyseSyntaxique.analyserProgramme(tokens);
         } catch (LexicalException e) {
             e.printStackTrace();
-            System.exit(2);
+            System.exit(4);
+        } catch (SyntaxException e) {
+            e.printStackTrace();
+            System.exit(5);
         }
     }
 
